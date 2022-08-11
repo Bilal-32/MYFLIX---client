@@ -1,0 +1,67 @@
+.login-form__style {
+  margin: 20px;
+}
+
+.container-style {
+  padding-top: 50px;
+}
+
+.card-style {
+  margin: 20px;
+}
+
+.image-style {
+  width: 286px;
+  height: 400px;
+}
+
+.button-style {
+  margin-left: 180px;
+}
+
+.add-list__button {
+  margin-left: 10px;
+}
+
+.movie-view__card {
+  margin: 20px;
+}
+
+.card-title {
+  color: #0d1b2a !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.directorCard {
+  margin: 30px;
+}
+
+.directorTitle {
+  color: #000;
+}
+
+.genreCard {
+  margin: 30px;
+}
+
+
+
+.primary {
+  color: red;
+}
+
+.container {
+  max-width: 100% !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #aed9e0 !important;
+  font-family: Kanit, sans-serif !important;
+}
+
+/*# sourceMappingURL=index.27d8da6b.css.map */
