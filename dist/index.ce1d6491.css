@@ -1,0 +1,14 @@
+.container {
+  max-width: 100% !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #aed9e0 !important;
+  font-family: Kanit, sans-serif !important;
+}
+
+/*# sourceMappingURL=index.ce1d6491.css.map */
