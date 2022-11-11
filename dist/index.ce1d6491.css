@@ -1,35 +1,11 @@
 
 
-.card-title {
-  color: #0d1b2a !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-}
-
-.primary {
-  color: red;
-}
-
-
-
-.genreCard {
-  margin: 30px;
-}
-
-.directorCard {
-  margin: 30px;
-}
-
-.directorTitle {
-  color: #000;
-}
-
-.add-list__button {
-  margin-left: 10px;
-}
-
-.movie-view__card {
+.login-form__style {
   margin: 20px;
+}
+
+.container-style {
+  padding-top: 50px;
 }
 
 .card-style {
@@ -46,12 +22,36 @@
   margin-left: 150px;
 }
 
-.container-style {
-  padding-top: 50px;
+.add-list__button {
+  margin-left: 10px;
 }
 
-.login-form__style {
+.movie-view__card {
   margin: 20px;
+}
+
+.directorCard {
+  margin: 30px;
+}
+
+.directorTitle {
+  color: #000;
+}
+
+.genreCard {
+  margin: 30px;
+}
+
+
+
+.primary {
+  color: red;
+}
+
+.card-title {
+  color: #0d1b2a !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
 }
 
 /*# sourceMappingURL=index.ce1d6491.css.map */
