@@ -41,7 +41,7 @@ export function Navigation({ logOut }) {
             >
                 <Nav>
                     {isAuth() && (
-                        <Nav.Link className="navbar-link" href={`/users/${user}`}>
+                        <Nav.Link className="navbar-link" href={`/`}>
                             MyPage
                         </Nav.Link>
                     )}
