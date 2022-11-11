@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Button, Card, CardGroup, Container, Col, Row } from 'react-bootstrap';
 import './register-view.scss';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export function RegistrationView(porps) {
     const [username, setUsername] = useState('');
@@ -130,6 +131,10 @@ export function RegistrationView(porps) {
                                         onClick={handleRegister}>
                                         Sign Up
                                     </Button>
+                                    or
+                                    <Link to={`/`}>
+                                        <Button className="button-style" variant="info">Sign In</Button>
+                                    </Link>
                                 </Form>
                             </Card.Body>
                         </Card>

@@ -47639,6 +47639,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _reactBootstrap = require("react-bootstrap");
 require("./register-view.scss");
 var _axios = _interopRequireDefault(require("axios"));
+var _reactRouterDom = require("react-router-dom");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         "default": obj
@@ -47814,7 +47815,12 @@ function RegistrationView(porps) {
         variant: "warning",
         type: "submit",
         onClick: handleRegister
-    }, "Sign Up"))))))));
+    }, "Sign Up"), "or", /*#__PURE__*/ _react["default"].createElement(_reactRouterDom.Link, {
+        to: "/"
+    }, /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Button, {
+        className: "button-style",
+        variant: "info"
+    }, "Sign In")))))))));
 }
 _c = RegistrationView;
 RegistrationView.propTypes = {
@@ -47828,7 +47834,7 @@ $RefreshReg$(_c, "RegistrationView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"21dqq","prop-types":"7wKI2","react-bootstrap":"3AD9A","./register-view.scss":"8il1C","axios":"jo6P5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"8il1C":[function() {},{}],"bwuIu":[function(require,module,exports) {
+},{"react":"21dqq","prop-types":"7wKI2","react-bootstrap":"3AD9A","./register-view.scss":"8il1C","axios":"jo6P5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","react-router-dom":"cHIiW"}],"8il1C":[function() {},{}],"bwuIu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$67b2 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -48733,18 +48739,12 @@ function Navigation(_ref) {
         id: "responsive-navbar-nav"
     }, /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav, null, isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav.Link, {
         className: "navbar-link",
-        href: "/users/".concat(user)
+        href: "/"
     }, "MyPage"), isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Button, {
         className: "navbar-button",
         variant: "outline-danger",
         onClick: logOut
-    }, "LogOut"), !isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav.Link, {
-        className: "navbar-link",
-        href: "/"
-    }, "Login"), !isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav.Link, {
-        className: "navbar-link",
-        href: "/register"
-    }, "Sign Up"))));
+    }, "LogOut"))));
 }
 _c = Navigation;
 var _default = Navigation;
