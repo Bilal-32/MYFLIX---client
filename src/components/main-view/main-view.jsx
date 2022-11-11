@@ -145,7 +145,7 @@ export class MainView extends React.Component {
                             exact
                             path="/movies/:movieId"
                             render={({ match, history }) => {
-                                if (!user)
+                                if (!localUser)
                                     return (
                                         <Col>
                                             <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -167,7 +167,7 @@ export class MainView extends React.Component {
                             exact
                             path="/director/:Name"
                             render={({ match }) => {
-                                if (!user)
+                                if (!localUser)
                                     return (
                                         <Col>
                                             <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -192,7 +192,7 @@ export class MainView extends React.Component {
                             exact
                             path="/genres/:id"
                             render={({ match }) => {
-                                if (!user)
+                                if (!localUser)
                                     return (
                                         <Col>
                                             <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />

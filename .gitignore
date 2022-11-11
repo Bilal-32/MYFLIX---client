@@ -2,3 +2,5 @@ node_modules
 .cache
 .parcel-cache
 es5
+package-lock.json
+yarn.lock

@@ -55,6 +55,17 @@ export function Navigation({ logOut }) {
                             LogOut
                         </Button>
                     )}
+                    {!isAuth() && (
+                        <Nav.Link className="navbar-link" href={`/`}>
+                            Login
+                        </Nav.Link>
+                    )}
+
+                    {!isAuth() && (
+                    <Nav.Link className="navbar-link" href={`/register`}>
+                        Sign Up
+                    </Nav.Link>
+                    )}
                 </Nav>
             </Navbar.Collapse>
             {/*</Container>*/}

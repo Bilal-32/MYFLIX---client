@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { setUser, validateInput } from '../../actions/actions';
 import { connect } from 'react-redux';
 import "./login-view.scss";
+import { Link } from 'react-router-dom';
 
 
 const mapStateToProps = (state) => {
@@ -87,6 +88,10 @@ function LoginView({ user, setUser, validateInput, onLoggedIn }) {
       <Button variant="warning" type="submit" onClick={handleSubmit}>
         Log In
       </Button>
+      or 
+      <Link to={`/register`}>
+        <Button className="button-style" variant="info">Sign Up</Button>
+      </Link>
     </Form>
   );
 }
