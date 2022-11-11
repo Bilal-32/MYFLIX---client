@@ -55,17 +55,17 @@ export function Navigation({ logOut }) {
                             LogOut
                         </Button>
                     )}
-                    {!isAuth() && (
+                    {/* {!isAuth() && (
                         <Nav.Link className="navbar-link" href={`/`}>
                             Login
                         </Nav.Link>
-                    )}
+                    )} */}
 
-                    {!isAuth() && (
+                    {/* {!isAuth() && (
                     <Nav.Link className="navbar-link" href='/register'>
                         Sign Up
                     </Nav.Link>
-                    )}
+                    )} */}
                 </Nav>
             </Navbar.Collapse>
             {/*</Container>*/}
