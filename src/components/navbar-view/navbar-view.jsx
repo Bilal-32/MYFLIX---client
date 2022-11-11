@@ -62,7 +62,7 @@ export function Navigation({ logOut }) {
                     )}
 
                     {!isAuth() && (
-                    <Nav.Link className="navbar-link" href={`/register`}>
+                    <Nav.Link className="navbar-link" href='/register'>
                         Sign Up
                     </Nav.Link>
                     )}
