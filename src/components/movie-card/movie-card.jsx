@@ -13,13 +13,13 @@ export class MovieCard extends React.Component {
                 <Card.Img
                     className="movieCard-img"
                     variant="top"
-                    src={movie.ImagePath}
+                    src={movie.imageUrl}
                     crossOrigin="anonymous"
                 />
                 <Card.Body>
-                    <Card.Title className="cardTitle">{movie.Title}</Card.Title>
+                    <Card.Title className="cardTitle">{movie.title}</Card.Title>
                     <Card.Text>
-                        {movie.Description}
+                        {movie.description}
                     </Card.Text>
                     <Link to={`/movies/${movie._id}`}>
                         <Button className="button-style" variant="warning">Open</Button>

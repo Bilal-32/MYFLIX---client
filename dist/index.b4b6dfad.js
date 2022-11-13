@@ -29706,7 +29706,10 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
             key: "getMovies",
             value: function getMovies(token) {
                 var _this2 = this;
-                _axios["default"].get("https://movie-api-21197.herokuapp.com/movies", {
+                _axios["default"] // .get("https://movie-api-21197.herokuapp.com/movies", {
+                //     headers: { Authorization: `Bearer ${token}` }
+                // })
+                .get("https://my-flix-careerfoundry.herokuapp.com/movies", {
                     headers: {
                         Authorization: "Bearer ".concat(token)
                     }
@@ -33235,9 +33238,9 @@ var mapStateToProps = function mapStateToProps(state) {
     var handleSubmit = function handleSubmit(e) {
         e.preventDefault();
         var isReq = validate();
-        if (isReq) _axios["default"].post("https://movie-api-21197.herokuapp.com/login", {
-            Username: username,
-            Password: password
+        if (isReq) _axios["default"].post("https://my-flix-careerfoundry.herokuapp.com/login", {
+            userName: username,
+            password: password
         }).then(function(response) {
             var data = response.data;
             onLoggedIn(data);
@@ -47755,11 +47758,11 @@ function RegistrationView(porps) {
         console.log(username, password, email, birthday);
         /* Send a request to the server for authentication
        then call props on registerd user (username) */ var isReq = validate();
-        if (isReq) _axios["default"].post("https://movie-api-21197.herokuapp.com/users", {
-            Username: username,
-            Password: password,
-            Email: email,
-            Birthday: birthday
+        if (isReq) _axios["default"].post("https://my-flix-careerfoundry.herokuapp.com/users", {
+            userName: username,
+            password: password,
+            email: email,
+            birthday: birthday
         }).then(function(response) {
             var data = response.data;
             console.log(data);
@@ -47960,11 +47963,11 @@ var MovieCard = /*#__PURE__*/ function(_React$Component) {
                 }, /*#__PURE__*/ _react["default"].createElement(_Card["default"].Img, {
                     className: "movieCard-img",
                     variant: "top",
-                    src: movie.ImagePath,
+                    src: movie.imageUrl,
                     crossOrigin: "anonymous"
                 }), /*#__PURE__*/ _react["default"].createElement(_Card["default"].Body, null, /*#__PURE__*/ _react["default"].createElement(_Card["default"].Title, {
                     className: "cardTitle"
-                }, movie.Title), /*#__PURE__*/ _react["default"].createElement(_Card["default"].Text, null, movie.Description), /*#__PURE__*/ _react["default"].createElement(_reactRouterDom.Link, {
+                }, movie.title), /*#__PURE__*/ _react["default"].createElement(_Card["default"].Text, null, movie.description), /*#__PURE__*/ _react["default"].createElement(_reactRouterDom.Link, {
                     to: "/movies/".concat(movie._id)
                 }, /*#__PURE__*/ _react["default"].createElement(_Button["default"], {
                     className: "button-style",
@@ -48111,20 +48114,20 @@ var MovieView = /*#__PURE__*/ function(_React$Component) {
                 }, /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Body, null, /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Img, {
                     id: "movie-view-image",
                     variant: "top",
-                    src: movie.ImagePath
+                    src: movie.imageUrl
                 }), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Title, {
                     id: "movie-Title",
                     className: "movie-title"
-                }, movie.Title), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
+                }, movie.title), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
                     id: "movie-description",
                     className: "movie-description"
-                }, movie.Description), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
+                }, movie.description), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
                     id: "movie-director",
                     className: "movie-director"
-                }, "Director: ", movie.Director.Name), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
+                }, "Director: ", movie.director.name), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Card.Text, {
                     id: "movie-genre",
                     className: "movie-genre"
-                }, "Genre: ", movie.Genre.Name))), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Button, {
+                }, "Genre: ", movie.genre.name))), /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Button, {
                     id: "movie-view-button",
                     onClick: function onClick() {
                         onBackClick(null);

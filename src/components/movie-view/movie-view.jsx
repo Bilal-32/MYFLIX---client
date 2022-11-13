@@ -17,22 +17,22 @@ export class MovieView extends React.Component {
                                     <Card.Img
                                         id="movie-view-image"
                                         variant="top"
-                                        src={movie.ImagePath}
+                                        src={movie.imageUrl}
                                     />
                                     <Card.Title id="movie-Title" className="movie-title">
-                                        {movie.Title}
+                                        {movie.title}
                                     </Card.Title>
                                     <Card.Text
                                         id="movie-description"
                                         className="movie-description"
                                     >
-                                        {movie.Description}
+                                        {movie.description}
                                     </Card.Text>
                                     <Card.Text id="movie-director" className="movie-director">
-                                        Director: {movie.Director.Name}
+                                        Director: {movie.director.name}
                                     </Card.Text>
                                     <Card.Text id="movie-genre" className="movie-genre">
-                                        Genre: {movie.Genre.Name}
+                                        Genre: {movie.genre.name}
                                     </Card.Text>
                                 </Card.Body>
                             </Card>

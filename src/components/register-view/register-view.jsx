@@ -50,11 +50,11 @@ export function RegistrationView(porps) {
            then call props on registerd user (username) */
         const isReq = validate();
         if (isReq) {
-            axios.post('https://movie-api-21197.herokuapp.com/users', {
-                Username: username,
-                Password: password,
-                Email: email,
-                Birthday: birthday
+            axios.post('https://my-flix-careerfoundry.herokuapp.com/users', {
+                userName: username,
+                password: password,
+                email: email,
+                birthday: birthday
             }).then(response => {
                 const data = response.data;
                 console.log(data);

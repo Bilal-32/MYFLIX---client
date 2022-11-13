@@ -53,9 +53,9 @@ function LoginView({ user, setUser, validateInput, onLoggedIn }) {
     const isReq = validate();
     if (isReq) {
       axios
-        .post('https://movie-api-21197.herokuapp.com/login', {
-          Username: username,
-          Password: password,
+        .post('https://my-flix-careerfoundry.herokuapp.com/login', {
+          userName: username,
+          password: password,
         })
         .then((response) => {
           const data = response.data;
