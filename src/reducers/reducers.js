@@ -26,7 +26,13 @@ function user(state = '', action) {
     case SET_USER:
       return action.value || localStorage.getItem('user');
     case ADD_FAVMOVIE:
-      return action.value;
+      return {
+        ...state,
+        FavoriteMovies: [
+          ...state?.FavoriteMovies,
+          action.value,
+        ]
+      };
     case REM_FAVMOVIE:
       return action.value;
     default:

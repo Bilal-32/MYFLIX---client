@@ -11,7 +11,7 @@ import { GenreView } from "../genre-view/genre-view";
 import { ProfileView } from "../profile-view/profile-view";
 import { Navigation } from "../navbar-view/navbar-view";
 import MoviesList from '../movie-list/movie-list';
-import { setMovies, setUser } from '../../actions/actions';
+import { setMovies, setUser, addFavMovie, remFavMovie } from '../../actions/actions';
 
 
 import { Row, Col, Container } from 'react-bootstrap';
@@ -25,7 +25,7 @@ export class MainView extends React.Component {
         super();
         //Initial state is set to null.
         this.state = {
-            user: null,
+            user: '',
         }
     }
 
@@ -38,14 +38,24 @@ export class MainView extends React.Component {
     componentDidMount() {
         let accessToken = localStorage.getItem("token");
         if (accessToken !== null) {
-            this.setState({
-                user: localStorage.getItem("user")
-            });
             this.getMovies(accessToken);
-            //localStorage.clear();
+            this.getUser(accessToken)
         }
     }
-
+    
+    getUser(token) {
+        const userL = localStorage.getItem('user');
+        const user = JSON.parse(userL)
+        axios.get(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(response => {
+            this.props.setUser(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     getMovies(token) {
         axios
             // .get("https://movie-api-21197.herokuapp.com/movies", {
@@ -68,7 +78,7 @@ export class MainView extends React.Component {
     onLoggedIn(authData) {
         console.log(authData, 'authData');
         this.setState({
-            user: authData.user.Username
+            user: authData.user
         })
         /*
         console.log(authData, 'authData');
@@ -79,7 +89,7 @@ export class MainView extends React.Component {
         this.props.setUser(userData);
         */
         localStorage.setItem("token", authData.token);
-        localStorage.setItem("user", authData.user.Username);
+        localStorage.setItem("user", JSON.stringify(authData.user));
         this.getMovies(authData.token);
     }
 
@@ -91,14 +101,54 @@ export class MainView extends React.Component {
         });
     }
 
+    handleDeleteFavorite = (movieId) => {
+        const userL = localStorage.getItem('user');
+        const user = JSON.parse(userL)
+        let token = localStorage.getItem('token');
+        /* Send a request to the server to delete favorite (delete) */
+        if (token !== null && user !== null) {
+          axios.delete(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}/movies/${movieId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+            .then(response => {
+              console.log(response);
+              this.props.remFavMovie(movieId);
+    
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      };
+      handleAddFavorite = (movieId) => {
+        const userL = localStorage.getItem('user');
+        const user = JSON.parse(userL)
+        let token = localStorage.getItem('token');
+        if (token !== null && user !== null) {
+          /* Send a request to the server to add favorite (delete) */
+          axios.post(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}/movies/${movieId}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+            .then(response => {
+              console.log(response);
+              this.props.addFavMovie(movieId);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      };
+
     render() {
         let { movies } = this.props;
-        let { user } = this.props;
         let localUser = localStorage.getItem('user');
-
+        const user =JSON.parse(localUser)
         return (
             <Router>
-                <Navigation logOut={() => this.onLoggedOut()} />
+                <Navigation
+                 user = {user}
+                 logOut={() => this.onLoggedOut()}
+                 />
                 <Container>
                     <Row className="main-view justify-content-center">
                         <Route
@@ -130,9 +180,9 @@ export class MainView extends React.Component {
                         />
                         <Route
                             exact
-                            path={`/users/${localUser}`}
+                            path={`/user/${user?.userName}`}
                             render={() => {
-                                if (!user) return <Redirect to="/" />;
+                                if (!localUser) return <Redirect to="/" />;
                                 return (
                                     <Col>
                                         <ProfileView
@@ -157,6 +207,9 @@ export class MainView extends React.Component {
                                 return (
                                     <Col md={8}>
                                         <MovieView
+                                            handleAddFavorite ={handleAddFavorite}
+                                            handleDeleteFavorite={handleDeleteFavorite}
+                                            isFav={user.FavoriteMovies.includes(match.params.movieId)}
                                             movie={movies.find(
                                                 (movie) => movie._id === match.params.movieId
                                             )}
@@ -229,4 +282,4 @@ let mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, { setMovies })(MainView);
+export default connect(mapStateToProps, { setMovies, setUser, addFavMovie, remFavMovie })(MainView);

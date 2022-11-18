@@ -5,7 +5,7 @@ import "./movie-view.scss";
 export class MovieView extends React.Component {
 
     render() {
-        const { movie, onBackClick } = this.props;
+        const { movie, onBackClick,handleAddFavorite,handleDeleteFavorite,isFav} = this.props;
 
         return (
             <Container>
@@ -32,12 +32,13 @@ export class MovieView extends React.Component {
                                         Director: {movie.director.name}
                                     </Card.Text>
                                     <Card.Text id="movie-genre" className="movie-genre">
-                                        Genre: {movie.genre.name}
+                                        Genre: {movie.genre?.[0]?.name}
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
                             <Button id="movie-view-button" onClick={() => { onBackClick(null); }}>Back</Button>
-                            <Button id="movie-view-button" onClick={() => { }}>Add to Favorites</Button>
+                            {!isFav && <Button id="movie-view-button" onClick={() => handleAddFavorite(movie._id)} >Add to Favorites</Button>}
+                            {isFav &&<Button id="movie-view-button" onClick={() => handleDeleteFavorite(movie._id)} >Remove from Favorites</Button>}
                         </Col>
                     </Row>
                 )}

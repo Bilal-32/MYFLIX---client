@@ -59,10 +59,11 @@ function LoginView({ user, setUser, validateInput, onLoggedIn }) {
         })
         .then((response) => {
           const data = response.data;
-          onLoggedIn(data);
+          // onLoggedIn(data);
+      
         })
         .catch((e) => {
-          console.log('no such user');
+          console.log(e.response);
           alert(
             'Wrong Username or Password. If you are new here, please register first.'
           );

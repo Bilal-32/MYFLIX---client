@@ -5,7 +5,8 @@ import axios from 'axios';
 import { MovieCard } from '../movie-card/movie-card';
 
 
-export function ProfileView({ movies }) {
+export function ProfileView({ user,movies,LogOut }) {
+    console.log(user)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -19,8 +20,7 @@ export function ProfileView({ movies }) {
 
     const getUser = () => {
         let token = localStorage.getItem('token');
-        let user = localStorage.getItem("user");
-        axios.get(`https://movie-api-21197.herokuapp.com/users/${user}`, {
+        axios.get(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
@@ -37,12 +37,11 @@ export function ProfileView({ movies }) {
     // Update users info 
     const updateUser = () => {
         let token = localStorage.getItem('token');
-        let user = localStorage.getItem("user");
-        axios.put(`https://movie-api-21197.herokuapp.com/users/${user}`, {
-            Username: username,
-            Email: email, //Email is a variable which holds the email
-            Birthday: birthday,
-            Password: password
+        axios.put(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
+            userName: username,
+            email: email, //Email is a variable which holds the email
+            birthday: birthday,
+            password: password
         },
             {
                 headers: {
@@ -62,8 +61,7 @@ export function ProfileView({ movies }) {
     const deleteUser = () => {
         setShowModal(false)
         let token = localStorage.getItem('token');
-        let user = localStorage.getItem("user");
-        axios.delete(`https://movie-api-21197.herokuapp.com/users/${user}`,
+        axios.delete(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`,
             {
                 headers: {
                     Authorization: 'Bearer ' + token
@@ -87,10 +85,10 @@ export function ProfileView({ movies }) {
             return (
                 <Row className="justify-content-md-center">
 
-                    {favouriteMovies.length === 0 ? (<h5>Add some movies to your list</h5>) : (
-                        favouriteMovies.map((movieId, i) => (
+                    {!(user.favourites?.length) > 0 ? (<h5>Add some movies to your list</h5>) : (
+                        movies?.map((movie, i) => (
                             <Col md={6} lg={4}>
-                                <MovieCard key={`${i}-${movieId}`} movie={movies.find(m => m._id == movieId)} />
+                                <MovieCard key={movie._id} movie={movies.find(m => m._id !== movie._id)} />
                             </Col>
                         ))
                     )}
@@ -173,3 +171,5 @@ export function ProfileView({ movies }) {
         </>
     )
 }
+
+export default ProfileView
