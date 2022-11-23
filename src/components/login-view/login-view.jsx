@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { setUser, validateInput } from '../../actions/actions';
+import { BASE_URL, setUser, validateInput } from '../../actions/actions';
 import { connect } from 'react-redux';
 import "./login-view.scss";
 import { Link } from 'react-router-dom';
@@ -14,13 +14,6 @@ const mapStateToProps = (state) => {
     user: state.user,
   };
 };
-
-/*
- * Credentials I know works for the myMovieFlix-Client;
- * https://movie-api-21197.herokuapp.com/login?Username=Alice1&Password=new2123
- * Username=Alice1
- * Password=new2123
- */
 
 function LoginView({ user, setUser, validateInput, onLoggedIn }) {
   const [username, setUsername] = useState('');
@@ -53,13 +46,13 @@ function LoginView({ user, setUser, validateInput, onLoggedIn }) {
     const isReq = validate();
     if (isReq) {
       axios
-        .post('https://my-flix-careerfoundry.herokuapp.com/login', {
-          userName: username,
+        .post(BASE_URL+'/login', {
+          username: username,
           password: password,
         })
         .then((response) => {
           const data = response.data;
-          // onLoggedIn(data);
+          onLoggedIn(data);
       
         })
         .catch((e) => {
@@ -86,13 +79,21 @@ function LoginView({ user, setUser, validateInput, onLoggedIn }) {
         {/* code added here to display validation error */}
         {passwordError && <p>{passwordError}</p>}
       </Form.Group>
-      <Button variant="warning" type="submit" onClick={handleSubmit}>
-        Log In
-      </Button>
-      or 
-      <Link to={`/register`}>
-        <Button className="button-style" variant="info">Sign Up</Button>
-      </Link>
+      <div class='login_buttons_container'>
+        <div class='login_buttons_container_divs'>
+          <Button variant="warning" type="submit" onClick={handleSubmit}>
+            Log In
+          </Button>
+        </div>
+        <div class='login_buttons_container_divs'>
+          <p style={{marginTop: '5px'}}>OR</p>
+        </div>
+        <div class='login_buttons_container_divs'>
+          <Link to={`/register`} class='btn btn-info'>
+           Sign Up
+          </Link>
+        </div>
+      </div>
     </Form>
   );
 }
