@@ -11,7 +11,7 @@ import { GenreView } from "../genre-view/genre-view";
 import { ProfileView } from "../profile-view/profile-view";
 import { Navigation } from "../navbar-view/navbar-view";
 import MoviesList from '../movie-list/movie-list';
-import { setMovies, setUser, addFavMovie, remFavMovie } from '../../actions/actions';
+import { setMovies, setUser, addFavMovie, remFavMovie, BASE_URL } from '../../actions/actions';
 
 
 import { Row, Col, Container } from 'react-bootstrap';
@@ -29,15 +29,9 @@ export class MainView extends React.Component {
         }
     }
 
-    /*
-     * https://movie-api-21197.herokuapp.com/login?Username=Alice1&Password=new2123
-     * Username=Alice1
-     * Password=new2123
-     */
-
     componentDidMount() {
         let accessToken = localStorage.getItem("token");
-        if (accessToken !== null) {
+        if (accessToken !== null && accessToken !== "undefined") {
             this.getMovies(accessToken);
             this.getUser(accessToken)
         }
@@ -46,22 +40,23 @@ export class MainView extends React.Component {
     getUser(token) {
         const userL = localStorage.getItem('user');
         const user = JSON.parse(userL)
-        axios.get(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
+        axios.get(BASE_URL+`/users/${user.username}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
           .then(response => {
             this.props.setUser(response.data);
+            this.setState({
+                user: response.data
+            });
+            localStorage.setItem("user", JSON.stringify(response.data));
           })
           .catch(error => {
             console.log(error);
           });
-      }
+    }
+    
     getMovies(token) {
-        axios
-            // .get("https://movie-api-21197.herokuapp.com/movies", {
-            //     headers: { Authorization: `Bearer ${token}` }
-            // })
-            .get("https://my-flix-careerfoundry.herokuapp.com/movies", {
+        axios.get(BASE_URL+"/movies", {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then((response) => {
@@ -76,7 +71,6 @@ export class MainView extends React.Component {
 
     /* When a user successfully logs in, this function updates the `user` property in state to that *particular user*/
     onLoggedIn(authData) {
-        console.log(authData, 'authData');
         this.setState({
             user: authData.user
         })
@@ -102,47 +96,56 @@ export class MainView extends React.Component {
     }
 
     handleDeleteFavorite = (movieId) => {
-        const userL = localStorage.getItem('user');
-        const user = JSON.parse(userL)
+        // const userL = this.state.user; //localStorage.getItem('user');
+        const user = this.state.user; //JSON.parse(userL)
         let token = localStorage.getItem('token');
         /* Send a request to the server to delete favorite (delete) */
         if (token !== null && user !== null) {
-          axios.delete(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}/movies/${movieId}`, {
+          axios.delete(BASE_URL+`/users/${user.username}/movies/${movieId}`, {
             headers: { Authorization: `Bearer ${token}` }
           })
             .then(response => {
-              console.log(response);
-              this.props.remFavMovie(movieId);
-    
+                this.props.remFavMovie(movieId);
+                this.setState({
+                    user: response.data
+                });
             })
             .catch(error => {
               console.log(error);
             });
         }
-      };
-      handleAddFavorite = (movieId) => {
-        const userL = localStorage.getItem('user');
-        const user = JSON.parse(userL)
+    };
+
+    handleAddFavorite = (movieId) => {
+        // const userL = this.state.user; //localStorage.getItem('user');
+        const user = this.state.user; //JSON.parse(userL)
         let token = localStorage.getItem('token');
         if (token !== null && user !== null) {
-          /* Send a request to the server to add favorite (delete) */
-          axios.post(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}/movies/${movieId}`, {}, {
+            /* Send a request to the server to add favorite (delete) */
+            axios.post(BASE_URL+`/users/${user.username}/movies/${movieId}`, {}, {
             headers: { Authorization: `Bearer ${token}` }
-          })
+            })
             .then(response => {
-              console.log(response);
-              this.props.addFavMovie(movieId);
+                this.setState({
+                    user: response.data
+                });
+                this.props.addFavMovie(movieId);
             })
             .catch(error => {
-              console.log(error);
+                console.log(error);
             });
         }
-      };
+    };
 
     render() {
         let { movies } = this.props;
         let localUser = localStorage.getItem('user');
-        const user =JSON.parse(localUser)
+
+        let user = this.state.user;
+        // try{
+        //     user =JSON.parse(localUser);
+        // }catch(e){}
+    
         return (
             <Router>
                 <Navigation
@@ -180,7 +183,7 @@ export class MainView extends React.Component {
                         />
                         <Route
                             exact
-                            path={`/user/${user?.userName}`}
+                            path={`/user/${user?.username}`}
                             render={() => {
                                 if (!localUser) return <Redirect to="/" />;
                                 return (
@@ -207,9 +210,9 @@ export class MainView extends React.Component {
                                 return (
                                     <Col md={8}>
                                         <MovieView
-                                            handleAddFavorite ={handleAddFavorite}
-                                            handleDeleteFavorite={handleDeleteFavorite}
-                                            isFav={user.FavoriteMovies.includes(match.params.movieId)}
+                                            handleAddFavorite= {() => this.handleAddFavorite(match.params.movieId)}
+                                            handleDeleteFavorite={() => this.handleDeleteFavorite(match.params.movieId)}
+                                            isFav={user?.favoriteMovies?.includes(match.params.movieId)}
                                             movie={movies.find(
                                                 (movie) => movie._id === match.params.movieId
                                             )}

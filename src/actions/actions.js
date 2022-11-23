@@ -3,6 +3,7 @@ export const SET_FILTER = 'SET_FILTER';
 export const SET_USER = 'SET_USER';
 export const ADD_FAVMOVIE = 'ADD_FAVMOVIE';
 export const REM_FAVMOVIE = 'REM_FAVMOVIE';
+export const BASE_URL = 'https://wichoflix.herokuapp.com'
 
 export function setMovies(value) {
   return { type: SET_MOVIES, value };

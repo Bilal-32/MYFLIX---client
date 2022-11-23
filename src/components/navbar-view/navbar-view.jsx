@@ -40,7 +40,7 @@ export function Navigation({ logOut,user }) {
             >
                 <Nav>
                     {isAuth() && (
-                        <Nav.Link className="navbar-link" href={`/user/${user?.userName}`}>
+                        <Nav.Link className="navbar-link" href={`/user/${user?.username}`}>
                             MyPage
                         </Nav.Link>
                     )}
