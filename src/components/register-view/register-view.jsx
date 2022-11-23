@@ -4,6 +4,7 @@ import { Form, Button, Card, CardGroup, Container, Col, Row } from 'react-bootst
 import './register-view.scss';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../actions/actions';
 
 export function RegistrationView(porps) {
     const [username, setUsername] = useState('');
@@ -50,8 +51,8 @@ export function RegistrationView(porps) {
            then call props on registerd user (username) */
         const isReq = validate();
         if (isReq) {
-            axios.post('https://my-flix-careerfoundry.herokuapp.com/users', {
-                userName: username,
+            axios.post(BASE_URL+'/users', {
+                username: username,
                 password: password,
                 email: email,
                 birthday: birthday
@@ -126,15 +127,23 @@ export function RegistrationView(porps) {
                                         {emailError && <p>{emailError}</p>}
                                     </Form.Group>
 
-                                    <Button variant='warning'
-                                        type='submit'
-                                        onClick={handleRegister}>
-                                        Sign Up
-                                    </Button>
-                                    or
-                                    <Link to={`/`}>
-                                        <Button className="button-style" variant="info">Sign In</Button>
-                                    </Link>
+                                    <div class='login_buttons_container'>
+                                        <div class='login_buttons_container_divs'>
+                                        <Button variant='warning'
+                                            type='submit'
+                                            onClick={handleRegister}>
+                                            Sign Up
+                                        </Button>
+                                        </div>
+                                        <div class='login_buttons_container_divs'>
+                                        <p style={{marginTop: '5px'}}>OR</p>
+                                        </div>
+                                        <div class='login_buttons_container_divs'>
+                                        <Link to={`/`} class='btn btn-info'>
+                                            Sign In
+                                        </Link>
+                                        </div>
+                                    </div>
                                 </Form>
                             </Card.Body>
                         </Card>

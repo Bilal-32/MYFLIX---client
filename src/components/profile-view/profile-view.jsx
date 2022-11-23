@@ -3,10 +3,11 @@ import './profile-view.scss'
 import { Form, Button, Container, Col, Row, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { MovieCard } from '../movie-card/movie-card';
+import { BASE_URL } from '../../actions/actions';
 
 
 export function ProfileView({ user,movies,LogOut }) {
-    console.log(user)
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -20,14 +21,13 @@ export function ProfileView({ user,movies,LogOut }) {
 
     const getUser = () => {
         let token = localStorage.getItem('token');
-        axios.get(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
+        axios.get(BASE_URL+`/users/${user.username}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
-                setUsername(response.data.Username)
-                setEmail(response.data.Email)
-                setFavouriteMovies(response.data.FavouriteMovies)
-                console.log(response.data)
+                setUsername(response.data.username)
+                setEmail(response.data.email)
+                setBirthday((new Date(response.data.birthday)).toISOString().split('T')[0])
             })
             .catch(e => {
                 console.log('Error')
@@ -37,8 +37,8 @@ export function ProfileView({ user,movies,LogOut }) {
     // Update users info 
     const updateUser = () => {
         let token = localStorage.getItem('token');
-        axios.put(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`, {
-            userName: username,
+        axios.put(BASE_URL+`/users/${user.username}`, {
+            username: username,
             email: email, //Email is a variable which holds the email
             birthday: birthday,
             password: password
@@ -49,8 +49,7 @@ export function ProfileView({ user,movies,LogOut }) {
                 }
             }).then((response) => {
                 alert('Your profile has been updated');
-                localStorage.setItem('user', response.data.Username),
-                    console.log(response.data)
+                localStorage.setItem('user', JSON.stringify(response.data));
             })
             .catch(e => {
                 console.log('Error')
@@ -59,15 +58,14 @@ export function ProfileView({ user,movies,LogOut }) {
 
     // Delete user 
     const deleteUser = () => {
-        setShowModal(false)
+        setShow(false)
         let token = localStorage.getItem('token');
-        axios.delete(`https://my-flix-careerfoundry.herokuapp.com/users/${user.userName}`,
+        axios.delete(BASE_URL+`/users/${user.username}`,
             {
                 headers: {
                     Authorization: 'Bearer ' + token
                 }
             }).then((response) => {
-                console.log(response.data);
                 alert('Your profile has been deleted');
                 localStorage.removeItem('user');
                 localStorage.removeItem('token');
@@ -79,18 +77,17 @@ export function ProfileView({ user,movies,LogOut }) {
     }
 
     const renderFavourits = () => {
-        console.log(movies)
-        if (movies.length + 0) {
+        if (user?.favoriteMovies) {
 
             return (
                 <Row className="justify-content-md-center">
 
-                    {!(user.favourites?.length) > 0 ? (<h5>Add some movies to your list</h5>) : (
-                        movies?.map((movie, i) => (
-                            <Col md={6} lg={4}>
-                                <MovieCard key={movie._id} movie={movies.find(m => m._id !== movie._id)} />
-                            </Col>
-                        ))
+                    {!(user?.favoriteMovies?.length) > 0 ? (<h5>Add some movies to your list</h5>) : (
+                        user?.favoriteMovies?.map((movie, i) => {
+                            return (<Col md={6} lg={4}>
+                                <MovieCard key={movie} movie={movies.find(m => m._id === movie)} />
+                            </Col>);
+        })
                     )}
 
                 </Row>
