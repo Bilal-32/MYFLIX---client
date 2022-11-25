@@ -3,8 +3,8 @@ import './profile-view.scss'
 import { Form, Button, Container, Col, Row, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { MovieCard } from '../movie-card/movie-card';
-import { BASE_URL } from '../../actions/actions';
-
+import { BASE_URL, setUser } from '../../actions/actions';
+import { connect } from 'react-redux';
 
 export function ProfileView({ user,movies,LogOut }) {
 
@@ -27,7 +27,8 @@ export function ProfileView({ user,movies,LogOut }) {
             .then((response) => {
                 setUsername(response.data.username)
                 setEmail(response.data.email)
-                setBirthday((new Date(response.data.birthday)).toISOString().split('T')[0])
+                setBirthday((new Date(response.data.birthday)).toISOString().split('T')[0]);
+                this.props.setUser(response.data);
             })
             .catch(e => {
                 console.log('Error')
@@ -49,7 +50,8 @@ export function ProfileView({ user,movies,LogOut }) {
                 }
             }).then((response) => {
                 alert('Your profile has been updated');
-                localStorage.setItem('user', JSON.stringify(response.data));
+                // localStorage.setItem('user', JSON.stringify(response.data));
+                this.props.setUser(response.data);
             })
             .catch(e => {
                 console.log('Error')
@@ -67,8 +69,7 @@ export function ProfileView({ user,movies,LogOut }) {
                 }
             }).then((response) => {
                 alert('Your profile has been deleted');
-                localStorage.removeItem('user');
-                localStorage.removeItem('token');
+                localStorage.clear();
                 window.open("/", "_self");
             })
             .catch(e => {
@@ -169,4 +170,10 @@ export function ProfileView({ user,movies,LogOut }) {
     )
 }
 
-export default ProfileView
+let mapStateToProps = (state) => {
+    return {
+        user: state.user,
+    };
+};
+
+export default connect(mapStateToProps, { setUser })(ProfileView);

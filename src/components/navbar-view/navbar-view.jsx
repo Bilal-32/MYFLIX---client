@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import "./navbar-view.scss";
 
-export function Navigation({ logOut,user }) {
+export function Navigation({ logOut }) {
     const onLoggedOut = () => {
         localStorage.clear();
         window.open("/", "_self");
@@ -18,6 +18,8 @@ export function Navigation({ logOut,user }) {
             return false;
         }
     };
+
+    let user = localStorage.getItem('user');
 
     return (
         <Navbar
@@ -40,7 +42,7 @@ export function Navigation({ logOut,user }) {
             >
                 <Nav>
                     {isAuth() && (
-                        <Nav.Link className="navbar-link" href={`/user/${user?.username}`}>
+                        <Nav.Link className="navbar-link" href={`/user/${user}`}>
                             MyPage
                         </Nav.Link>
                     )}

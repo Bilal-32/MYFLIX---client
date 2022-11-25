@@ -30068,7 +30068,8 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
             });
         });
         _this.state = {
-            user: ""
+            user: "",
+            loading: false
         };
         return _this;
     }
@@ -30087,20 +30088,25 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
             key: "getUser",
             value: function getUser(token) {
                 var _this2 = this;
+                this.setState({
+                    loading: true
+                });
                 var userL = localStorage.getItem("user");
-                var user = JSON.parse(userL);
-                _axios["default"].get(_actions.BASE_URL + "/users/".concat(user.username), {
+                _axios["default"].get(_actions.BASE_URL + "/users/".concat(userL), {
                     headers: {
                         Authorization: "Bearer ".concat(token)
                     }
                 }).then(function(response) {
                     _this2.props.setUser(response.data);
                     _this2.setState({
-                        user: response.data
+                        user: response.data,
+                        loading: false
                     });
-                    localStorage.setItem("user", JSON.stringify(response.data));
                 })["catch"](function(error) {
                     console.log(error);
+                    _this2.setState({
+                        loading: false
+                    });
                 });
             }
         },
@@ -30124,6 +30130,9 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
         {
             key: "onLoggedIn",
             value: function onLoggedIn(authData) {
+                this.props.setUser(authData.user);
+                localStorage.setItem("token", authData.token);
+                localStorage.setItem("user", authData.user.username);
                 this.setState({
                     user: authData.user
                 });
@@ -30134,16 +30143,15 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
           Birthday: authData.user.Birthday.substring(0, 10),
       };
       this.props.setUser(userData);
-      */ localStorage.setItem("token", authData.token);
-                localStorage.setItem("user", JSON.stringify(authData.user));
+      */ // localStorage.setItem("token", authData.token);
+                // localStorage.setItem("user", JSON.stringify(authData.user));
                 this.getMovies(authData.token);
             }
         },
         {
             key: "onLoggedOut",
             value: function onLoggedOut() {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
+                localStorage.clear();
                 this.setState({
                     user: null
                 });
@@ -30154,8 +30162,8 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
             value: function render() {
                 var _this4 = this;
                 var movies = this.props.movies;
-                var localUser = localStorage.getItem("user");
                 var user = this.state.user;
+                var localUser = user;
                 // try{
                 //     user =JSON.parse(localUser);
                 // }catch(e){}
@@ -30170,7 +30178,7 @@ var MainView = /*#__PURE__*/ function(_React$Component) {
                     exact: true,
                     path: "/",
                     render: function render() {
-                        if (!localUser) return /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _react["default"].createElement(_loginView["default"], {
+                        if (!localUser && !_this4.state.loading) return /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _react["default"].createElement(_loginView["default"], {
                             onLoggedIn: function onLoggedIn(user) {
                                 return _this4.onLoggedIn(user);
                             }
@@ -48821,6 +48829,7 @@ var _reactBootstrap = require("react-bootstrap");
 var _axios = _interopRequireDefault(require("axios"));
 var _movieCard = require("../movie-card/movie-card");
 var _actions = require("../../actions/actions");
+var _reactRedux = require("react-redux");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         "default": obj
@@ -48899,6 +48908,7 @@ function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
 }
 function ProfileView(_ref) {
+    var _this = this;
     var user = _ref.user, movies = _ref.movies, LogOut = _ref.LogOut;
     var _useState = (0, _react.useState)(""), _useState2 = _slicedToArray(_useState, 2), username = _useState2[0], setUsername = _useState2[1];
     var _useState3 = (0, _react.useState)(""), _useState4 = _slicedToArray(_useState3, 2), password = _useState4[0], setPassword = _useState4[1];
@@ -48919,6 +48929,7 @@ function ProfileView(_ref) {
             setUsername(response.data.username);
             setEmail(response.data.email);
             setBirthday(new Date(response.data.birthday).toISOString().split("T")[0]);
+            _this.props.setUser(response.data);
         })["catch"](function(e) {
             console.log("Error");
         });
@@ -48938,7 +48949,8 @@ function ProfileView(_ref) {
             }
         }).then(function(response) {
             alert("Your profile has been updated");
-            localStorage.setItem("user", JSON.stringify(response.data));
+            // localStorage.setItem('user', JSON.stringify(response.data));
+            _this.props.setUser(response.data);
         })["catch"](function(e) {
             console.log("Error");
         });
@@ -48953,8 +48965,7 @@ function ProfileView(_ref) {
             }
         }).then(function(response) {
             alert("Your profile has been deleted");
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
+            localStorage.clear();
             window.open("/", "_self");
         })["catch"](function(e) {
             console.log("Error");
@@ -49053,7 +49064,14 @@ function ProfileView(_ref) {
     }, "Delete your profile")), cancelUserModal(), /*#__PURE__*/ _react["default"].createElement("p", null), /*#__PURE__*/ _react["default"].createElement("h2", null, "Favourite Movies:"), renderFavourits()));
 }
 _c = ProfileView;
-var _default = ProfileView;
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        user: state.user
+    };
+};
+var _default = (0, _reactRedux.connect)(mapStateToProps, {
+    setUser: _actions.setUser
+})(ProfileView);
 exports["default"] = _default;
 var _c;
 $RefreshReg$(_c, "ProfileView");
@@ -49063,7 +49081,7 @@ $RefreshReg$(_c, "ProfileView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"21dqq","./profile-view.scss":"eyKYH","react-bootstrap":"3AD9A","axios":"jo6P5","../movie-card/movie-card":"bwuIu","../../actions/actions":"biFwH","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"eyKYH":[function() {},{}],"divrl":[function(require,module,exports) {
+},{"react":"21dqq","./profile-view.scss":"eyKYH","react-bootstrap":"3AD9A","axios":"jo6P5","../movie-card/movie-card":"bwuIu","../../actions/actions":"biFwH","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","react-redux":"bdVon"}],"eyKYH":[function() {},{}],"divrl":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8284 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -49085,7 +49103,7 @@ function _interopRequireDefault(obj) {
     };
 }
 function Navigation(_ref) {
-    var logOut = _ref.logOut, user = _ref.user;
+    var logOut = _ref.logOut;
     var onLoggedOut = function onLoggedOut() {
         localStorage.clear();
         window.open("/", "_self");
@@ -49097,6 +49115,7 @@ function Navigation(_ref) {
         if (localStorage.getItem("token")) return localStorage.getItem("token");
         else return false;
     };
+    var user = localStorage.getItem("user");
     return /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Navbar, {
         id: "main-nav",
         className: "mb-5",
@@ -49114,7 +49133,7 @@ function Navigation(_ref) {
         id: "responsive-navbar-nav"
     }, /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav, null, isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Nav.Link, {
         className: "navbar-link",
-        href: "/user/".concat(user === null || user === void 0 ? void 0 : user.username)
+        href: "/user/".concat(user)
     }, "MyPage"), isAuth() && /*#__PURE__*/ _react["default"].createElement(_reactBootstrap.Button, {
         className: "navbar-button",
         variant: "outline-danger",

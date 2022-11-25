@@ -26,6 +26,7 @@ export class MainView extends React.Component {
         //Initial state is set to null.
         this.state = {
             user: '',
+            loading: false
         }
     }
 
@@ -38,20 +39,25 @@ export class MainView extends React.Component {
     }
     
     getUser(token) {
+        this.setState({
+            loading: true
+        });
         const userL = localStorage.getItem('user');
-        const user = JSON.parse(userL)
-        axios.get(BASE_URL+`/users/${user.username}`, {
+        axios.get(BASE_URL+`/users/${userL}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
           .then(response => {
             this.props.setUser(response.data);
             this.setState({
-                user: response.data
+                user: response.data,
+                loading: false
             });
-            localStorage.setItem("user", JSON.stringify(response.data));
           })
           .catch(error => {
             console.log(error);
+            this.setState({
+                loading: false
+            });
           });
     }
     
@@ -71,6 +77,10 @@ export class MainView extends React.Component {
 
     /* When a user successfully logs in, this function updates the `user` property in state to that *particular user*/
     onLoggedIn(authData) {
+        this.props.setUser(authData.user);
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', authData.user.username);
+
         this.setState({
             user: authData.user
         })
@@ -82,14 +92,13 @@ export class MainView extends React.Component {
         };
         this.props.setUser(userData);
         */
-        localStorage.setItem("token", authData.token);
-        localStorage.setItem("user", JSON.stringify(authData.user));
+        // localStorage.setItem("token", authData.token);
+        // localStorage.setItem("user", JSON.stringify(authData.user));
         this.getMovies(authData.token);
     }
 
     onLoggedOut() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        localStorage.clear();
         this.setState({
             user: null
         });
@@ -139,9 +148,9 @@ export class MainView extends React.Component {
 
     render() {
         let { movies } = this.props;
-        let localUser = localStorage.getItem('user');
 
         let user = this.state.user;
+        let localUser = user; 
         // try{
         //     user =JSON.parse(localUser);
         // }catch(e){}
@@ -158,7 +167,7 @@ export class MainView extends React.Component {
                             exact
                             path="/"
                             render={() => {
-                                if (!localUser)
+                                if (!localUser && !this.state.loading)
                                     return (
                                         <Col>
                                             <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
